@@ -2,7 +2,7 @@
 package main
 import (
 	"fmt"
-	"project/go/var/model"
+	"project/go/1_var/model"
 )
 func main() {
 	// 指针
