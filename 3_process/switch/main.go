@@ -19,6 +19,7 @@ func main(){
 		default:
 			fmt.Println("未知")
 	}
+	
 	b := "nil"
 	switch b {
 		case "nil":
