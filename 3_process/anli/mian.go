@@ -1,33 +1,5 @@
 /*
-package main
-import "fmt"
-func main(){
-	var name string
-	var password int
-	for i :=1;i<=3;i++{
-		fmt.Println("请输入用户名、密码用空格隔开")
-		fmt.Scanln(&name)
-		fmt.Scanln(&password)
-		//fmt.Scanf("%s %d ",&name,&password)有问题
-		if name=="张无忌" && password ==888{
-			fmt.Println("欢迎")
-			break
-		}else{
-			n := 3-i
-			if n>0 {
-				fmt.Printf("请重新输入，还有%d次机会\n",n)
-				continue
-			}else{
-				fmt.Println("机会用完")
-				break
-			}
-		}
-	}
-
-}
-
-
-//统计3个班，每班五个同学，求平均分(未完成)
+//统计3个班，每班五个同学，求平均分-for
 package main
 import "fmt"
 func main(){
@@ -49,7 +21,7 @@ func main(){
 	fmt.Printf("总分%v 平均分%v",total,total/(5*3))
 }
 
-//打印金字塔
+//打印金字塔-for
 package main
 import "fmt"
 func main(){
@@ -79,14 +51,14 @@ func main(){
 				//fmt.Print(" ")
 				fmt.Print(" ")
 			}
-			
+
 		}
 		fmt.Println()
 	}
 }
-*/
 
-//打印九九乘法表
+
+//打印九九乘法表-for
 package main
 import "fmt"
 func main(){
@@ -96,4 +68,49 @@ func main(){
 		}
 		fmt.Println()
 	}
+}
+
+//100以内的数求和，当和大于20时的当前数-break
+package main
+import "fmt"
+func main(){
+	sum :=0
+	for i :=0;i<=100;i++{
+		sum +=i
+		if sum>20{
+			fmt.Println(sum,i)
+			break
+		}
+	}
+}
+*/
+
+// 输入账号密码-break，continue
+package main
+
+import "fmt"
+
+func main() {
+	var name string
+	var password int
+	for i := 1; i <= 3; i++ {
+		fmt.Println("请输入用户名、密码用空格隔开")
+		fmt.Scanln(&name)
+		fmt.Scanln(&password)
+		//fmt.Scanf("%s %d ",&name,&password)有问题
+		if name == "张无忌" && password == 888 {
+			fmt.Println("欢迎")
+			break
+		} else {
+			n := 3 - i
+			if n > 0 {
+				fmt.Printf("请重新输入，还有%d次机会\n", n)
+				continue
+			} else {
+				fmt.Println("机会用完")
+				break
+			}
+		}
+	}
+
 }
