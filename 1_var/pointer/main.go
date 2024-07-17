@@ -1,5 +1,5 @@
-
 package main
+
 import (
 	"fmt"
 	"project/go/1_var/model"
