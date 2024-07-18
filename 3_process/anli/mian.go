@@ -83,6 +83,65 @@ func main(){
 		}
 	}
 }
+
+//打印1--100之内的奇数-continue
+package main
+import "fmt"
+func main(){
+	for i := 0; i <= 100; i++ {
+		if i%2==0{
+			continue
+		}
+		fmt.Print(i," ")
+	}
+}
+
+//输入个数不确定的整数，并判断读入的正数和负数的个数，输入0时结束程序 break-continue
+package main
+import "fmt"
+func main(){
+	z := 0
+	f := 0
+	for {
+		fmt.Println("请输入一个整数")
+		num := 0
+		fmt.Scanln(&num)
+		if num > 0{
+			z++
+			continue
+		}
+		if num < 0{
+			f++
+			continue
+		}else{
+			break
+		}
+	}
+	fmt.Printf("正数%v 负数%v",z,f)
+}
+
+//某人有 100.000 元,每经过一次路口，需要交费,规则如下当现金>50000 时,每次交 5%
+//当现金<=50000 时,每次交 1000
+//编程计算该人可以经过多少次路口,使用 for break 方式完成
+package main
+import "fmt"
+func main(){
+	count := 100000
+	sum := 0
+	for{
+		if count<=1000{
+			break
+		}
+		if count >50000{
+			count -= count/20
+		}else{
+			count -= 1000
+		}
+		sum++
+		fmt.Println(count)
+	}
+	fmt.Println(sum)
+}
 */
 
 // 输入账号密码-break，continue
