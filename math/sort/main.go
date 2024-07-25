@@ -1,7 +1,10 @@
 package main
 
-import "fmt"
-
+import (
+	"fmt"
+	"math"
+	"sort"
+)
 // 创建结构体，封装成类
 type Sorter struct {
 	nums []int
@@ -91,7 +94,7 @@ func partition(arr []int, left, right int) int {
 	return index - 1
 }
 
-	//归并排序
+//归并排序
 func MergeSort(s Sorter) []int {
 	arr := make([]int, len(s.nums))
 	copy(arr, s.nums)
@@ -118,43 +121,156 @@ func Merge(left []int, right []int) []int {
 			right = right[1:]
 		}
 	}
-
 	for len(left) != 0 {
 		result = append(result, left[0])
 		left = left[1:]
 	}
-
 	for len(right) != 0 {
 		result = append(result, right[0])
 		right = right[1:]
 	}
-
 	return result
 }
 
+//堆排序
+func HeapSort(s Sorter) []int {
+	arr := make([]int, len(s.nums))
+	copy(arr, s.nums)
+	arrLen := len(arr)
+	for i := arrLen / 2; i >= 0; i-- {
+		heapify(arr, i, arrLen)
+	}
+	for i := arrLen - 1; i >= 0; i-- {
+		arr[i], arr[0] = arr[0], arr[i]
+		arrLen -= 1
+		heapify(arr, 0, arrLen)
+	}
+	return arr
+}
 
+func heapify(arr []int, i, arrLen int) {
+	left := 2*i + 1
+	right := 2*i + 2
+	largest := i
+	if left < arrLen && arr[left] > arr[largest] {
+		largest = left
+	}
+	if right < arrLen && arr[right] > arr[largest] {
+		largest = right
+	}
+	if largest != i {
+		arr[i], arr[largest] = arr[largest], arr[i]
+			heapify(arr, largest, arrLen)
+	}
+}
+//桶排序
 
+func BucketSort(s Sorter, bucketSize int) []int {
+	arr := make([]int, len(s.nums))
+	copy(arr, s.nums)
+	if len(arr) == 0 {
+		return arr
+	}
+	// 找到数组中的最大和最小值
+	minValue, maxValue := arr[0], arr[0]
+	for _, num := range arr {
+		if num < minValue {
+			minValue = num
+		}
+		if num > maxValue {
+			maxValue = num
+		}
+	}
+	// 创建桶
+	bucketCount := int((maxValue-minValue)/int(bucketSize)) + 1
+	buckets := make([][]int, bucketCount)
+	// 将数组元素放入对应的桶
+	for _, num := range arr {
+		index := int((num - minValue) / int(bucketSize))
+		buckets[index] = append(buckets[index], num)
+	}
+	// 对每个桶进行排序并合并
+	sortedArr := []int{}
+	for _, bucket := range buckets {
+		if len(bucket) > 0 {
+			sort.Ints(bucket) // 使用 Go 的内置排序
+			sortedArr = append(sortedArr, bucket...)
+		}
+	}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	return sortedArr
+}
+//计数排序
+func CountingSort(s Sorter) []int {
+	arr := make([]int, len(s.nums))
+	copy(arr, s.nums)
+	if len(arr) == 0 {
+		return arr
+	}
+	// 找到数组中的最大值和最小值
+	maxValue := arr[0]
+	minValue := arr[0]
+	for _, num := range arr {
+		if num > maxValue {
+			maxValue = num
+		}
+		if num < minValue {
+			minValue = num
+		}
+	}
+	// 创建计数数组
+	rangeOfElements := maxValue - minValue + 1
+	count := make([]int, rangeOfElements)
+	// 计数每个元素出现的次数
+	for _, num := range arr {
+		count[num-minValue]++
+	}
+	// 修改计数数组，使其存储每个元素的最终位置
+	for i := 1; i < len(count); i++ {
+		count[i] += count[i-1]
+	}
+	// 创建输出数组
+	output := make([]int, len(arr))
+	// 构建输出数组
+	for i := len(arr) - 1; i >= 0; i-- {
+		output[count[arr[i]-minValue]-1] = arr[i]
+		count[arr[i]-minValue]--
+	}
+	return output
+}
+//基数排序
+func RadixSort(s Sorter) []int {
+	arr := make([]int, len(s.nums))
+	copy(arr, s.nums)
+	maxVal := arr[0]
+	for _, num := range arr {
+		if num > maxVal {
+			maxVal = num
+		}
+	}
+	for pos := 0; maxVal/int(math.Pow10(pos)) > 0; pos++ {
+		arr = counterSort(arr, pos)
+	}
+	return arr
+}
+func counterSort(arr []int, pos int) []int {
+	n := len(arr)
+	output := make([]int, n)
+	count := make([]int, 10)
+	for i := 0; i < n; i++ {
+		digit := (arr[i] / int(math.Pow10(pos))) % 10
+		count[digit]++
+	}
+	for i := 1; i < 10; i++ {
+		count[i] += count[i-1]
+	}
+	for i := n - 1; i >= 0; i-- {
+		digit := (arr[i] / int(math.Pow10(pos))) % 10
+		output[count[digit]-1] = arr[i]
+		count[digit]--
+	}
+	return output
+}
 
 
 
@@ -256,42 +372,16 @@ func (s Sorter)MergeNums() []int {
 // 			right = right[1:]
 // 		}
 // 	}
-
 // 	for len(left) != 0 {
 // 		result = append(result, left[0])
 // 		left = left[1:]
 // 	}
-
 // 	for len(right) != 0 {
 // 		result = append(result, right[0])
 // 		right = right[1:]
 // 	}
-
 // 	return result
 // }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 func main() {
@@ -308,6 +398,14 @@ func main() {
 	fmt.Println("快速", newNums)
 	newNums = MergeSort(sorter)
 	fmt.Println("归并", newNums)
+	newNums = HeapSort(sorter)
+	fmt.Println("堆排序", newNums)
+	newNums = BucketSort(sorter,10)
+	fmt.Println("桶排序", newNums)
+	newNums = CountingSort(sorter)
+	fmt.Println("计数", newNums)
+	newNums = RadixSort(sorter)
+	fmt.Println("基数", newNums)
 
 	fmt.Println("引用传递")
 	fmt.Println(sorter)
