@@ -137,6 +137,7 @@ func HeapSort(s Sorter) []int {
 	arr := make([]int, len(s.nums))
 	copy(arr, s.nums)
 	arrLen := len(arr)
+	//从下往上，建立大顶堆，每个节点都比子节点大，如果不建立，后面的排序不成立（不理解可以举例说明）
 	for i := arrLen / 2; i >= 0; i-- {
 		heapify(arr, i, arrLen)
 	}
@@ -147,7 +148,7 @@ func HeapSort(s Sorter) []int {
 	}
 	return arr
 }
-
+//因为是从上往下比，所以要先建立大顶堆，才能确保第一个是最大的
 func heapify(arr []int, i, arrLen int) {
 	left := 2*i + 1
 	right := 2*i + 2
@@ -160,7 +161,7 @@ func heapify(arr []int, i, arrLen int) {
 	}
 	if largest != i {
 		arr[i], arr[largest] = arr[largest], arr[i]
-			heapify(arr, largest, arrLen)
+		heapify(arr, largest, arrLen)
 	}
 }
 //桶排序

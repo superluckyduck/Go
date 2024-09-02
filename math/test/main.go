@@ -1,6 +1,7 @@
 package main
 import (
 	"fmt"
+	"sort"
 )
 type Sort struct{
 	nums []int
@@ -85,15 +86,75 @@ func MergeSort(left []int,right []int) []int{
 	}
 	return res
 }
+func (s Sort)HeapSort() []int {
+	arr := make([]int, len(s.nums))
+	copy(arr, s.nums)
+	arrLen := len(arr)
+	for i := arrLen / 2; i >= 0; i-- {
+		heapify(arr, i, arrLen)
+	}
+	for i := arrLen - 1; i >= 0; i-- {
+		heapify(arr, 0, arrLen)
+		arr[i], arr[0] = arr[0], arr[i]
+		arrLen -= 1
+	}
+	return arr
+}
+
+func heapify(arr []int, i, arrLen int) {
+	left := 2*i + 1
+	right := 2*i + 2
+	largest := i
+	if left < arrLen && arr[left] > arr[largest] {
+		largest = left
+	}
+	if right < arrLen && arr[right] > arr[largest] {
+		largest = right
+	}
+	if largest != i {
+		arr[i], arr[largest] = arr[largest], arr[i]
+		heapify(arr, largest, arrLen)
+	}
+}
+func (s Sort)Bucket(size int){
+	maxVal := s.nums[0]
+	minVal := s.nums[0]
+	for i:=0;i<len(s.nums);i++{
+		if s.nums[i] < minVal {
+			minVal = s.nums[i]
+		}
+		if s.nums[i] > maxVal {
+			maxVal = s.nums[i]
+		}
+	}
+	count := (maxVal-minVal)/size+1
+	buckets := make([][]int, count)
+	for _, num := range s.nums {
+		index := int((num - minVal) / int(size))
+		buckets[index] = append(buckets[index], num)
+	}
+	sortedArr := []int{}
+	for _, bucket := range buckets {
+		if len(bucket) > 0 {
+			sort.Ints(bucket)
+			sortedArr = append(sortedArr, bucket...)
+		}
+	}
+	for i:=0;i<len(s.nums);i++{
+		s.nums[i] = sortedArr[i]
+	}
+}
 
 func main(){
-	arr := []int{1,6,3,2,4}
+	arr := []int{1,6,5,3,2,4,7,9}
 	s := Sort{nums: arr}
 	fmt.Println(s.nums)
 	// s.Bubble()
 	// s.Quick()
 	// s.Insert()
-	new :=s.Merge()
-	fmt.Println(new)
+	// new :=s.Merge()
+	// new := s.HeapSort()
+	s.Bucket(2)
+	fmt.Println(s.nums)
 
 }
